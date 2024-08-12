@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.555">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>stl_lead_inequity</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="stl_lead_inequity_files/libs/clipboard/clipboard.min.js"></script>
+<script src="stl_lead_inequity_files/libs/quarto-html/quarto.js"></script>
+<script src="stl_lead_inequity_files/libs/quarto-html/popper.min.js"></script>
+<script src="stl_lead_inequity_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="stl_lead_inequity_files/libs/quarto-html/anchor.min.js"></script>
+<link href="stl_lead_inequity_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="stl_lead_inequity_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="stl_lead_inequity_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="stl_lead_inequity_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="stl_lead_inequity_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+
+
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'janitor'
+
+The following objects are masked from 'package:stats':
+
+    chisq.test, fisher.test</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>stl_lead <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"stl_blood_lead.csv"</span>))</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>stl_lead</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          geoID tractCE             nameLSAD countTested pctElevated totalPop
+1   29510118100  118100    Census Tract 1181         345        9.57     1161
+2   29510117400  117400    Census Tract 1174         871       12.06     4307
+3   29510126700  126700    Census Tract 1267         458       18.12     1089
+4   29510119102  119102 Census Tract 1191.02         182        2.20     3237
+5   29510126800  126800    Census Tract 1268         486        4.73     3490
+6   29510126900  126900    Census Tract 1269        1296       15.66     4590
+7   29510108100  108100    Census Tract 1081         903       11.41     3144
+8   29510127000  127000    Census Tract 1270         585       10.94     2052
+9   29510127400  127400    Census Tract 1274        2116        3.12     5486
+10  29510103700  103700    Census Tract 1037         417        3.36     2408
+11  29510103800  103800    Census Tract 1038         758        3.03     3902
+12  29510123100  123100    Census Tract 1231         928       10.67     3650
+13  29510104500  104500    Census Tract 1045         248        4.84     1597
+14  29510106100  106100    Census Tract 1061         796       18.97     1724
+15  29510126600  126600    Census Tract 1266        1263        7.13     3495
+16  29510114102  114102 Census Tract 1141.02         874        2.63     4002
+17  29510116302  116302 Census Tract 1163.02        1203       18.37     2477
+18  29510105500  105500    Census Tract 1055         745       11.95     2993
+19  29510116301  116301 Census Tract 1163.01         650       10.00     3608
+20  29510106400  106400    Census Tract 1064         758       17.55     2445
+21  29510119101  119101 Census Tract 1191.01         135        1.48     2587
+22  29510105200  105200    Census Tract 1052         393       13.99     2977
+23  29510105300  105300    Census Tract 1053         694       11.67     2450
+24  29510114101  114101 Census Tract 1141.01        1026        7.41     4334
+25  29510127100  127100    Census Tract 1271         661        9.38     2024
+26  29510127200  127200    Census Tract 1272         660        4.09     4486
+27  29510105400  105400    Census Tract 1054         982        9.88     2337
+28  29510127300  127300    Census Tract 1273         883        7.47     3527
+29  29510125600  125600    Census Tract 1256         396        3.54     4185
+30  29510127500  127500    Census Tract 1275         807        3.72     2489
+31  29510125700  125700    Census Tract 1257        1820        3.46     3752
+32  29510127600  127600    Census Tract 1276         351        4.56     3129
+33  29510123300  123300    Census Tract 1233         451       10.64     2920
+34  29510104200  104200    Census Tract 1042         268        5.97     3435
+35  29510103600  103600    Census Tract 1036         248        5.24     1448
+36  29510124100  124100    Census Tract 1241        1657       22.09     5304
+37  29510105198  105198 Census Tract 1051.98         238        5.04     3483
+38  29510124200  124200    Census Tract 1242        1109       17.67     3382
+39  29510124300  124300    Census Tract 1243         529       13.23     2964
+40  29510123200  123200    Census Tract 1232         409        3.42     2210
+41  29510124600  124600    Census Tract 1246         721       10.12     1943
+42  29510125500  125500    Census Tract 1255         279        5.02     2903
+43  29510101800  101800    Census Tract 1018         713       13.88     3452
+44  29510106500  106500    Census Tract 1065         909       15.73     2852
+45  29510102100  102100    Census Tract 1021         491        3.26     2802
+46  29510102200  102200    Census Tract 1022         958        2.92     6367
+47  29510106600  106600    Census Tract 1066         640       23.28     1709
+48  29510103100  103100    Census Tract 1031         574        1.74     3220
+49  29510106300  106300    Census Tract 1063         702       16.95     1455
+50  29510107200  107200    Census Tract 1072         426       19.72     1156
+51  29510103400  103400    Census Tract 1034         363        4.41     1874
+52  29510106700  106700    Census Tract 1067         899       21.25     2960
+53  29510102500  102500    Census Tract 1025         342        6.73     2028
+54  29510107400  107400    Census Tract 1074         940       20.00     2968
+55  29510101100  101100    Census Tract 1011         352        4.55     2591
+56  29510107500  107500    Census Tract 1075         812       14.90     2420
+57  29510112100  112100    Census Tract 1121         322        4.35     4432
+58  29510107600  107600    Census Tract 1076         623       13.32     2197
+59  29510116500  116500    Census Tract 1165        1084       14.39     4481
+60  29510101200  101200    Census Tract 1012         641        2.96     3275
+61  29510101300  101300    Census Tract 1013         728        6.18     4040
+62  29510111100  111100    Census Tract 1111         497        6.44     1814
+63  29510101400  101400    Census Tract 1014         638        9.09     2750
+64  29510101500  101500    Census Tract 1015         877        8.21     3771
+65  29510111200  111200    Census Tract 1112         401       13.97     1021
+66  29510110300  110300    Census Tract 1103         694       16.57     1968
+67  29510111300  111300    Census Tract 1113         426       16.43     1348
+68  29510111400  111400    Census Tract 1114         538       19.52     1396
+69  29510111500  111500    Census Tract 1115         263       10.27      620
+70  29510112200  112200    Census Tract 1122         506       16.01     1645
+71  29510115400  115400    Census Tract 1154         782        7.93     3185
+72  29510115500  115500    Census Tract 1155        1707       14.35     7069
+73  29510115600  115600    Census Tract 1156        1531       12.67     4815
+74  29510119200  119200    Census Tract 1192         257        4.67     1746
+75  29510119300  119300    Census Tract 1193         163        6.75     4319
+76  29510120200  120200    Census Tract 1202         446       13.90     1370
+77  29510114200  114200    Census Tract 1142         891        2.47     4724
+78  29510114300  114300    Census Tract 1143        1324        3.85     5300
+79  29510115100  115100    Census Tract 1151         907        7.39     4226
+80  29510110400  110400    Census Tract 1104         824       22.45     2147
+81  29510110500  110500    Census Tract 1105         449       23.16     1013
+82  29510110100  110100    Census Tract 1101         964       17.12     2879
+83  29510110200  110200    Census Tract 1102         784       19.52     2309
+84  29510112300  112300    Census Tract 1123         855       13.10     2038
+85  29510116100  116100    Census Tract 1161         852        9.39     3231
+86  29510116200  116200    Census Tract 1162         890        7.42     4267
+87  29510116400  116400    Census Tract 1164        1805       19.83     4913
+88  29510107300  107300    Census Tract 1073        1427       10.86     4675
+89  29510118400  118400    Census Tract 1184          23        0.00     1557
+90  29510118600  118600    Census Tract 1186         394        8.38     3822
+91  29510113500  113500    Census Tract 1135         289        4.15     2231
+92  29510117100  117100    Census Tract 1171         188        7.45     1469
+93  29510115700  115700    Census Tract 1157        1390       17.55     3789
+94  29510121200  121200    Census Tract 1212        1142        4.20     2508
+95  29510121100  121100    Census Tract 1211         368        3.53     1779
+96  29510115200  115200    Census Tract 1152        1003       10.57     3348
+97  29510108200  108200    Census Tract 1082         609        9.85     2504
+98  29510108300  108300    Census Tract 1083         689        9.58     1987
+99  29510112400  112400    Census Tract 1124         306        4.25     4132
+100 29510115300  115300    Census Tract 1153        1659        8.80     5248
+101 29510117200  117200    Census Tract 1172        1314        7.69     5566
+102 29510102300  102300    Census Tract 1023         298        4.36     1987
+103 29510109700  109700    Census Tract 1097        1070       15.79     2239
+104 29510102400  102400    Census Tract 1024         544        8.82     2673
+105 29510106200  106200    Census Tract 1062        1107       11.38     1825
+106 29510109600  109600    Census Tract 1096         952       21.74     3222
+    totalPop_MOE white white_MOE black black_MOE povertyTot povertyTot_MOE
+1            192   414       100   724       179        324            140
+2            447  2604       303  1338       374        615            255
+3            199   432       116   631       187        506            164
+4            309  2008       262   646       210        958            234
+5            231  3026       270   194        98        349            129
+6            826   148       217  4320       760       1743            825
+7            464   108       111  3020       442        652            305
+8            273   304        82  1739       283        331            156
+9            516  1777       391  3603       621       2524            598
+10           274  2149       212   156       190        254             88
+11           279  3444       271   340       259        195             78
+12           454   994       190  2556       470        598            201
+13           262  1297       226   147        96        191             92
+14           240    12        12  1679       229        709            213
+15           466   611       251  2878       429       1483            373
+16           264  3871       253   116       105        289            160
+17           318   773       263   997       241        909            267
+18           384   126       116  2800       398        942            392
+19           418  2532       398   694       311        486            193
+20           370    18        28  2397       373        737            253
+21           275  1283       196   887       169        788            292
+22           265  1278       201  1437       264        368            127
+23           359   234       136  2102       307        698            214
+24           424  3138       332   870       360        769            393
+25           247    67        53  1952       242        847            211
+26           584  3212       347   900       613        626            229
+27           322   221       132  1921       310        802            188
+28           312  1328       235  2029       317       1092            319
+29           463  1883       322  2026       443        495            314
+30           268   472        89  1977       278        819            270
+31           484    38        40  3707       484       2450            562
+32           268  2469       266   547       227        307            133
+33           251  2008       229   836       193        365            168
+34           282  3017       243   193       133        403            185
+35           155  1125       161    46        53        262            111
+36           690  1490       392  3219       587       2398            517
+37           337  2643       317   454       227        831            275
+38           517   931       228  2029       401       1375            369
+39           249  2166       231   690       119        506            145
+40           198  1447       155   640       125        425            112
+41           194   644       128  1143       162       1197            212
+42           316  1869       217   790       182        473            205
+43           468  2160       317  1077       291       1044            338
+44           364   133        73  2680       343        646            245
+45           287  2294       260   319       214        260            104
+46           351  6128       365    59        50        354            146
+47           270    17        31  1683       273        878            238
+48           255  2774       352   346       241        264            203
+49           236    16        18  1406       235        432            186
+50           212     6        10  1128       205        452            230
+51           121  1798       122    43        38        190             83
+52           558     2         4  2914       553       1278            501
+53           199  1749       203    94        49        216             86
+54           426    31        36  2937       428       1416            376
+55           267  2113       257   143       128        240            128
+56           358    29        35  2346       352        594            347
+57           508  2846       371  1292       370        542            161
+58           238    42        55  2150       248        751            182
+59           535  2091       411  1617       387       1158            372
+60           253  3026       283    87        71        436            245
+61           352  3364       306   404       273        260            146
+62           307    54        44  1743       306        901            279
+63           247  1705       233   697       191        572            222
+64           570  2169       498  1340       389       1119            427
+65           221    59        43   928       208        507            219
+66           356    52        46  1916       371        513            194
+67           213     4         6  1344       213        426            154
+68           379    11         7  1357       381        549            328
+69            94     1         4   597       120        350            109
+70           238   117        56  1528       241        612            209
+71           390  1999       290   806       265        888            318
+72           832  3227       751  3543       690       2801           1049
+73           585  2164       436  2315       472       1759            511
+74           233   606       205  1005       177        314            107
+75           501  2320       440  1115       180       1317            265
+76           232   169       117  1126       210        737            226
+77           391  3713       515   522       243        664            370
+78           386  4674       370   163       144        234            137
+79           444  3465       416   413       161        973            267
+80           357     6         9  2115       365        626            358
+81           155     5         6   995       151        367            146
+82           387    39        45  2787       396        887            359
+83           444     6        10  2281       443        949            333
+84           409    23        26  1987       411        920            307
+85           409  1638       252   839       248        756            269
+86           365  2977       386   851       247        532            250
+87           616  1350       352  2871       496       1850            632
+88           492    72        71  4572       489       1362            343
+89           317   949       275   418        88        267             70
+90           414  2011       254  1331       361        914            250
+91           164  2166       156    37        52        304            125
+92           163  1052       138   264       104        158             65
+93           537  1792       401  1695       474       1714            583
+94           331    35        42  2446       336       1606            336
+95           280   220        74  1503       281        889            253
+96           379  1484       259  1419       282       1084            388
+97           358    82        57  2359       364        651            321
+98           215   119        93  1848       227        501            160
+99           336  2553       330  1077       284        656            214
+100          538  2810       331  1680       461       1133            394
+101          606  2719       389  2470       434       1326            531
+102          218  1840       213    35        49        351            238
+103          357   274       184  1949       329       1212            331
+104          205  2387       225   224       155        642            266
+105          325     9        20  1807       331       1176            341
+106          555    45        40  3153       548        845            435
+    povertyU18 povertyU18_MOE
+1          109            105
+2          169            156
+3           98             60
+4           15             25
+5           35             47
+6          627            595
+7          256            136
+8           47             79
+9         1110            318
+10          15             23
+11          27             30
+12          91             72
+13          11             15
+14         231            110
+15         677            227
+16           0             11
+17         285            149
+18         379            195
+19          63             52
+20         236            139
+21          88            102
+22          21             23
+23         164            106
+24         110            113
+25         343            127
+26          77             93
+27         345            131
+28         219            146
+29         124            184
+30         267            152
+31        1320            389
+32          10             13
+33         133             97
+34          74             66
+35          71             88
+36        1100            351
+37           5              9
+38         515            223
+39          61             69
+40          85             40
+41         422            124
+42           0             11
+43         382            254
+44         162            113
+45          30             45
+46          32             36
+47         257            114
+48          82            130
+49         119             88
+50         178            132
+51          39             50
+52         369            257
+53          55             48
+54         640            249
+55          92             76
+56         205            151
+57          12             20
+58         165             75
+59         267            203
+60         120            126
+61           0             11
+62         338            126
+63         223            111
+64         409            272
+65         207            152
+66         151             90
+67          22             32
+68         287            279
+69         126             43
+70         225            146
+71         295            176
+72         877            402
+73         729            342
+74           3              3
+75          65             53
+76         260            108
+77         259            194
+78          58             65
+79         234            117
+80         227            188
+81         128             75
+82         202            138
+83         387            226
+84         429            224
+85         231            133
+86          80            127
+87         742            398
+88         336            186
+89           0             11
+90         103             88
+91          35             41
+92           0             11
+93         813            385
+94         953            248
+95         179            138
+96         473            269
+97         235            227
+98         153             89
+99          37             48
+100        459            205
+101        407            301
+102         92             89
+103        493            211
+104        274            162
+105        606            239
+106        391            302</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(stl_lead)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 106  15</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summarise</span>(stl_lead)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>data frame with 0 columns and 1 row</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>skimr<span class="sc">::</span><span class="fu">skim</span>(stl_lead)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Name</td>
+<td style="text-align: left;">stl_lead</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Number of rows</td>
+<td style="text-align: left;">106</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Number of columns</td>
+<td style="text-align: left;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">_______________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Column type frequency:</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">character</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">14</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">________________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Group variables</td>
+<td style="text-align: left;">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 13%">
+<col style="width: 19%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 8%">
+<col style="width: 12%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">min</th>
+<th style="text-align: right;">max</th>
+<th style="text-align: right;">empty</th>
+<th style="text-align: right;">n_unique</th>
+<th style="text-align: right;">whitespace</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">nameLSAD</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">106</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 7%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 6%">
+<col style="width: 9%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 4%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">sd</th>
+<th style="text-align: right;">p0</th>
+<th style="text-align: right;">p25</th>
+<th style="text-align: right;">p50</th>
+<th style="text-align: right;">p75</th>
+<th style="text-align: right;">p100</th>
+<th style="text-align: left;">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">geoID</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2.951011e+10</td>
+<td style="text-align: right;">8132.85</td>
+<td style="text-align: right;">29510101100</td>
+<td style="text-align: right;">2.951011e+10</td>
+<td style="text-align: right;">2.951011e+10</td>
+<td style="text-align: right;">2.951012e+10</td>
+<td style="text-align: right;">2.951013e+10</td>
+<td style="text-align: left;">▇▇▆▃▆</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">tractCE</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.133859e+05</td>
+<td style="text-align: right;">8132.85</td>
+<td style="text-align: right;">101100</td>
+<td style="text-align: right;">1.064250e+05</td>
+<td style="text-align: right;">1.123500e+05</td>
+<td style="text-align: right;">1.191018e+05</td>
+<td style="text-align: right;">1.276000e+05</td>
+<td style="text-align: left;">▇▇▆▃▆</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">countTested</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">7.373700e+02</td>
+<td style="text-align: right;">414.18</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">4.110000e+02</td>
+<td style="text-align: right;">6.940000e+02</td>
+<td style="text-align: right;">9.232500e+02</td>
+<td style="text-align: right;">2.116000e+03</td>
+<td style="text-align: left;">▆▇▅▂▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pctElevated</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.016000e+01</td>
+<td style="text-align: right;">6.01</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4.590000e+00</td>
+<td style="text-align: right;">9.480000e+00</td>
+<td style="text-align: right;">1.438000e+01</td>
+<td style="text-align: right;">2.328000e+01</td>
+<td style="text-align: left;">▇▇▇▅▃</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">totalPop</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2.998580e+03</td>
+<td style="text-align: right;">1263.14</td>
+<td style="text-align: right;">620</td>
+<td style="text-align: right;">2.025000e+03</td>
+<td style="text-align: right;">2.911500e+03</td>
+<td style="text-align: right;">3.784500e+03</td>
+<td style="text-align: right;">7.069000e+03</td>
+<td style="text-align: left;">▅▇▆▂▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">totalPop_MOE</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3.533500e+02</td>
+<td style="text-align: right;">140.30</td>
+<td style="text-align: right;">94</td>
+<td style="text-align: right;">2.495000e+02</td>
+<td style="text-align: right;">3.335000e+02</td>
+<td style="text-align: right;">4.395000e+02</td>
+<td style="text-align: right;">8.320000e+02</td>
+<td style="text-align: left;">▅▇▃▂▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">white</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.371720e+03</td>
+<td style="text-align: right;">1293.40</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">8.850000e+01</td>
+<td style="text-align: right;">1.290000e+03</td>
+<td style="text-align: right;">2.168250e+03</td>
+<td style="text-align: right;">6.128000e+03</td>
+<td style="text-align: left;">▇▅▃▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">white_MOE</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2.013800e+02</td>
+<td style="text-align: right;">145.21</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">6.050000e+01</td>
+<td style="text-align: right;">2.125000e+02</td>
+<td style="text-align: right;">2.997500e+02</td>
+<td style="text-align: right;">7.510000e+02</td>
+<td style="text-align: left;">▇▇▅▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">black</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.429870e+03</td>
+<td style="text-align: right;">1038.31</td>
+<td style="text-align: right;">35</td>
+<td style="text-align: right;">6.332500e+02</td>
+<td style="text-align: right;">1.334500e+03</td>
+<td style="text-align: right;">2.029000e+03</td>
+<td style="text-align: right;">4.572000e+03</td>
+<td style="text-align: left;">▇▆▃▂▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">black_MOE</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2.883800e+02</td>
+<td style="text-align: right;">148.84</td>
+<td style="text-align: right;">38</td>
+<td style="text-align: right;">1.832500e+02</td>
+<td style="text-align: right;">2.690000e+02</td>
+<td style="text-align: right;">3.792500e+02</td>
+<td style="text-align: right;">7.600000e+02</td>
+<td style="text-align: left;">▆▇▆▂▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">povertyTot</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">7.869400e+02</td>
+<td style="text-align: right;">528.61</td>
+<td style="text-align: right;">158</td>
+<td style="text-align: right;">4.085000e+02</td>
+<td style="text-align: right;">6.515000e+02</td>
+<td style="text-align: right;">9.557500e+02</td>
+<td style="text-align: right;">2.801000e+03</td>
+<td style="text-align: left;">▇▅▂▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">povertyTot_MOE</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2.705000e+02</td>
+<td style="text-align: right;">156.11</td>
+<td style="text-align: right;">65</td>
+<td style="text-align: right;">1.602500e+02</td>
+<td style="text-align: right;">2.415000e+02</td>
+<td style="text-align: right;">3.375000e+02</td>
+<td style="text-align: right;">1.049000e+03</td>
+<td style="text-align: left;">▇▅▁▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">povertyU18</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2.497500e+02</td>
+<td style="text-align: right;">262.60</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">6.650000e+01</td>
+<td style="text-align: right;">1.735000e+02</td>
+<td style="text-align: right;">3.417500e+02</td>
+<td style="text-align: right;">1.320000e+03</td>
+<td style="text-align: left;">▇▂▁▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">povertyU18_MOE</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.400800e+02</td>
+<td style="text-align: right;">107.48</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">6.125000e+01</td>
+<td style="text-align: right;">1.205000e+02</td>
+<td style="text-align: right;">1.947500e+02</td>
+<td style="text-align: right;">5.950000e+02</td>
+<td style="text-align: left;">▇▆▂▁▁</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(stl_lead)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "geoID"          "tractCE"        "nameLSAD"       "countTested"   
+ [5] "pctElevated"    "totalPop"       "totalPop_MOE"   "white"         
+ [9] "white_MOE"      "black"          "black_MOE"      "povertyTot"    
+[13] "povertyTot_MOE" "povertyU18"     "povertyU18_MOE"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>stl_lead <span class="ot">&lt;-</span> janitor<span class="sc">::</span><span class="fu">clean_names</span>(stl_lead)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(stl_lead)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "geo_id"          "tract_ce"        "name_lsad"       "count_tested"   
+ [5] "pct_elevated"    "total_pop"       "total_pop_moe"   "white"          
+ [9] "white_moe"       "black"           "black_moe"       "poverty_tot"    
+[13] "poverty_tot_moe" "poverty_u18"     "poverty_u18_moe"</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>stl_lead_prop <span class="ot">&lt;-</span> stl_lead <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">prop_white =</span> white <span class="sc">/</span> total_pop <span class="sc">*</span> <span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(stl_lead_prop, <span class="fu">aes</span>(<span class="at">x =</span> prop_white, <span class="at">y =</span> pct_elevated)) <span class="sc">+</span> </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="fu">aes</span>(<span class="at">color =</span> pct_elevated)) <span class="sc">+</span> </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_gradient</span>(<span class="at">low =</span> <span class="st">"darkolivegreen"</span>, <span class="at">high =</span> <span class="st">"brown1"</span>) <span class="sc">+</span> </span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="stl_lead_inequity_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"figs"</span>, <span class="st">"stl_lead_plot.png"</span>), <span class="at">height =</span> <span class="dv">6</span>, <span class="at">width =</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(stl_lead_prop, <span class="fu">aes</span>(<span class="at">x =</span> pct_elevated)) <span class="sc">+</span> </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> .<span class="dv">5</span>, <span class="at">fill =</span> <span class="st">"brown"</span>) <span class="sc">+</span> </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Percentage of Elevated Blood Lead Levels"</span>, <span class="at">y =</span> <span class="cn">NULL</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="stl_lead_inequity_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
